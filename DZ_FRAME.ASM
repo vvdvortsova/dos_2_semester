@@ -1,7 +1,7 @@
 .model tiny
 
 videoseg        = 0b800h
-probel          = 0e00h         ; fill rectangle with space
+probel          = 0e00h         ; space
 string_color    = 0eh           ; red   
 
 				; 05 - magneta color on the black
@@ -15,7 +15,7 @@ right_down      = 0511h         ; right low border
 left_down       = 0510h         ; left low border                 
 
 Y               = 5
-X               = 40
+X               = 20
 COLUMNS         = 80
 ROWS            = 25
      
@@ -43,22 +43,29 @@ Start:
 		
 
 draw_body:      ; put params
-		push left_up
+                add di, (80 - 20) * 2 ; 20 - frame width, 80 - width of window
+		push hor_line
 		push probel
 		push hor_line
 		call draw
 
 		loop draw_body		
 		
-	
+		add di, (80 - 20) * 2
+                ; put params
+		push left_up
+		push hor_line
+		push right_up
+		call draw
 
-		jmp exit     
+
+		;jmp exit     
 
 
 
 ; write message
 
-                mov di, (20+30) * 2    ;rewrite
+                mov di, ((Y + 3) * COLUMNS + (X + 8)) * 2  
                 mov si, offset Message
                 mov ah, string_color
 loopStr:        lodsb
@@ -94,7 +101,7 @@ draw_line:      mov es:[di], ax
 
 		pop cx	   ; old cx	
 		
-		mov ax, [bp + 4] ; draw left simbol		
+		mov ax, [bp + 4] ; draw right simbol		
                 mov es:[di], ax
 		inc di
 		inc di
