@@ -17,7 +17,7 @@ left_down       = 0510h         ; left low border
 Y               = 5
 X               = 20
 COLUMNS         = 80
-ROWS            = 25
+width           = 20
      
 .code
 org 100h
@@ -43,7 +43,7 @@ Start:
 		
 
 draw_body:      ; put params
-                add di, (80 - 20) * 2 ; 20 - frame width, 80 - width of window
+                add di, (80 - width) * 2 ; new line : 80 - width of window
 		push hor_line
 		push probel
 		push hor_line
@@ -51,7 +51,7 @@ draw_body:      ; put params
 
 		loop draw_body		
 		
-		add di, (80 - 20) * 2
+		add di, (80 - width) * 2 ; new line
                 ; put params
 		push left_up
 		push hor_line
@@ -79,7 +79,7 @@ loopStr:        lodsb
 exit:           mov ax, 4c00h
                 int 21h
 
-draw proc 
+draw proc       ; params : left_corner, line, right corner : prints line in videosegv
 		push bp    ; save bp
 		mov bp, sp ; put bp on the top of the stack
 		
@@ -109,7 +109,7 @@ draw_line:      mov es:[di], ax
 		
  		pop bp     ;  old bp
                 pop ax     ;  old ax 
-		ret 6      ; clean stack
+		ret 6      ; clean stack 2 * 3 params
 draw endp
 
 .data
