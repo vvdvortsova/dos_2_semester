@@ -7,25 +7,22 @@ VIDEOSEG        = 0b800h
 org 100h
 
 start:		
-        mov ax, 10101111b 
-        push ax ; number
-        push 16  ; base
-        push 4 ; shift 
-        push 16*2 ; videosegv shift
-        call converter
-        
-		mov ax, 4c00h	; exit
-		int 21h
+                mov ax, 10101111b 
+                push ax                         ; number
+                push 16                         ; base
+                push 4                          ; shift 
+                push 16*2                       ; videosegv shift
+                call converter
+                
+                mov ax, 4c00h	                ; exit
+                int 21h
 
 ;--------------------------------------------------------------------------------------------------------------------------
 ; Function prints in videosegv the inverted value of register to base -2, -8, -16    223d -> DFh -> prints FD
 ; params: put on the stack number, base, shift, videosegv shift
 ;--------------------------------------------------------------------------------------------------------------------------  
-converter proc  
-               
-                
+converter   proc  
                 mov cl, 0
-                
                 mov bx, VIDEOSEG               ; get videosegv
                 mov es, bx
                 mov bp, sp                     ; put bp on the top of the stack   
@@ -46,8 +43,8 @@ translate:      cmp cx, 20d
                 jge  exit_proc
                 and ax, bx                     
                 cmp al, 10d
-                jl first_sym	; ah < 10
-		        jae second_sym  ; ah >= 10
+                jl first_sym	               ; ah < 10
+		        jae second_sym                 ; ah >= 10
 next:
                 mov es:[di], al
                 inc di
@@ -59,15 +56,11 @@ next:
                 add cl, [bp + 4] 
                 jmp translate
                 
-                
-                
-                jmp exit_proc
-                
 to_bin:         mov bx, 0001b                  ; set bit mask
                 push ax
                 jmp translate
                 
-to_8:           mov bx, 0111b; set bit mask  
+to_8:           mov bx, 0111b                  ; set bit mask  
                 push ax
                 jmp translate
 
@@ -78,8 +71,8 @@ second_sym:	    add al, 'A' - 10
 		        jmp next
 
 exit_proc:      pop ax
-                ret 8               ; 2*4
-                endp  
+                ret 8                          ; 2*4
+            endp  
 ;--------------------------------------------------------------------------------------------------------------------------
 ;                
 ;--------------------------------------------------------------------------------------------------------------------------  
