@@ -2,10 +2,8 @@
 .model tiny
 .code
 org 7C00h
-
 ; DOS loader (1 head 79 track 17) 
 ; frame (1 head 79 track 18 sector) - put it in the end of the freeDos
-
 main:		        mov ah, 02h        ; read loader and execute code of the frame(sub-program)
                     mov al, 1          ; sector to write
                     xor bx, bx
@@ -23,21 +21,13 @@ main:		        mov ah, 02h        ; read loader and execute code of the frame(su
 org 7C00h + 510
 dw  0AA55h
 
+
 org 7C00h + 512
 ; sub-program
-start:		
-                    call draw_frame
-                    call print_message
+start:	            ;call draw_frame
+                    ;call print_message
 
-                    pop ax
-                    xor ah, ah
-                    int 10h		    ; restore video mode
-
-                    xor ax, ax
-                    mov es, ax
-                    mov ds, ax	    ; restore es and ds
-                
-                    mov bx, 7C00h   ; code address
+                    mov bx, 7C00h   ; data written to disk
                     mov ah, 02h
                     mov al, 1       ; sector to write
                     mov ch, 79      ; track 
@@ -54,8 +44,8 @@ start:
 
                     push bx
                     ret
-include draw_lib.asm			    ; load libs
-
+                    
+;include draw_lib.asm			; load libs                    
 org 7C00h + 512 + 511
 db  0
 
