@@ -1,22 +1,14 @@
 .286
 .model tiny
 .code
-org 7C00h
+org 0500h
 
 CODE_ADDR	=	7C00h
 
 start:		
-                call draw_frame
-                call print_message
+                ;call draw_frame
+                ;call print_message
 
-                pop ax
-                xor ah, ah
-                int 10h		    ; restore video mode
-
-                xor ax, ax
-                mov es, ax
-                mov ds, ax	    ; restore es and ds
-            
                 mov bx, CODE_ADDR
                 mov ah, 02h
                 mov al, 1       ; sector to write
@@ -34,9 +26,9 @@ start:
 
                 push bx
                 ret
-include draw_lib.asm			; load libs
+;include draw_lib.asm			; load libs
 
-db start+512-$ dup (0)
-
+org 0500h + 511
+db  0
 
 end		start
