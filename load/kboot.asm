@@ -42,9 +42,8 @@ start:	        call draw_frame
     
                 xor ax, ax
                 mov es, ax
-                mov ds, ax	; Restore default es and ds
+                mov ds, ax	    ; default es and ds
 
-                    
                 mov bx, 7C00h   ; data written to disk
                 mov ah, 02h
                 mov al, 1       ; sector to write
@@ -68,7 +67,7 @@ start:	        call draw_frame
 ; Function draws frame in video segv. It changes register es, bx, di, cx, ax.              
 ;--------------------------------------------------------------------------------------------------------------------------  
 draw_frame proc 
-                pusha                         ; save registers  
+                pusha                          ; save registers  
                 ; go to VIDEOSEGv
                 mov bx, VIDEOSEG
                 mov es, bx
@@ -96,7 +95,7 @@ draw_body:      ; put params
                 push HOR_LINE
                 push RIGHT_UP
                 call draw_line_func
-                popa                        ; old registers
+                popa                           ; old registers
 		        ;jmp exit    
                 ret 0    
             endp
